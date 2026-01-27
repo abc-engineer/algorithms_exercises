@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequences Project</title>
+    <style>
+        :root {
+            --notion-black: rgb(37, 35, 31);
+            --notion-gray: rgb(90, 89, 88);
+            --notion-light-gray: rgb(235, 235, 235);
+            --notion-white: rgb(255, 255, 255);
+            --notion-blue: rgb(35, 131, 226);
+            --notion-background: rgb(251, 251, 250);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --notion-black: rgb(255, 255, 255);
+                --notion-gray: rgb(200, 200, 200);
+                --notion-light-gray: rgb(47, 47, 47);
+                --notion-white: rgb(25, 25, 25);
+                --notion-background: rgb(25, 25, 25);
+            }
+        }
+
+        body {
+            font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: var(--notion-background);
+            color: var(--notion-black);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+            font-weight: 450;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--notion-white);
+            border-radius: 3px;
+            padding: 32px;
+            box-shadow: rgb(15 15 15 / 5%) 0px 0px 0px 1px, 
+                       rgb(15 15 15 / 1%) 0px 3px 6px, 
+                       rgb(15 15 15 / 5%) 0px 9px 24px;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+            color: var(--notion-black);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--notion-black);
+            font-weight: 600;
+        }
+
+        textarea {
+            width: calc(100% - 24px);
+            min-height: 120px;
+            padding: 12px;
+            border-radius: 3px;
+            border: 1px solid var(--notion-light-gray);
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 14px;
+            resize: vertical;
+            background: var(--notion-white);
+            color: var(--notion-black);
+            transition: border-color 0.2s ease;
+            font-weight: 500;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--notion-blue);
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .width-container {
+            display: flex;
+            align-items: center;
+            width: 170px;
+            gap: 8px;
+        }
+
+        .width-container label {
+            margin: 0;
+            white-space: nowrap;
+            min-width: 45px;
+        }
+
+        input[type="number"] {
+            height: 32px;
+            padding: 0 8px;
+            border-radius: 3px;
+            border: 1px solid var(--notion-light-gray);
+            font-size: 14px;
+            color: var(--notion-black);
+            background: var(--notion-white);
+            flex: 1;
+            min-width: 0;
+        }
+
+        button {
+            background-color: var(--notion-black);
+            color: var(--notion-white);
+            border: none;
+            border-radius: 3px;
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+        }
+
+        button:hover {
+            background-color: rgba(55, 53, 47, 0.85);
+        }
+
+        .result-section {
+            margin-top: 24px;
+            max-width: 100%;
+        }
+
+        .result-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--notion-black);
+            font-weight: 600;
+        }
+
+        #result {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre;
+            background-color: var(--notion-background);
+            padding: 16px;
+            border-radius: 3px;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            border: 1px solid var(--notion-light-gray);
+            font-weight: 500;
+            color: var(--notion-black);
+            margin-top: 4px;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 24px;
+            }
+        }
+
+        .section-divider {
+            margin: 48px 0 32px 0;
+            border-top: 1px solid var(--notion-light-gray);
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            margin: 0 0 24px 0;
+            color: var(--notion-black);
+        }
+
+        #reverseResult {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            white-space: pre-wrap;
+            background-color: var(--notion-background);
+            padding: 16px;
+            border-radius: 3px;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-y: auto;
+            max-height: 300px;
+            border: 1px solid var(--notion-light-gray);
+            font-weight: 500;
+            color: var(--notion-black);
+            margin-top: 4px;
+            word-break: break-all;
+            width: calc(100% - 32px);
+        }
+
+        .section-divider:first-of-type {
+            margin: 24px 0 32px 0;
+        }
+
+        .sequence-select {
+            height: 32px;
+            padding: 0 8px;
+            border-radius: 3px;
+            border: 1px solid var(--notion-light-gray);
+            font-size: 14px;
+            color: var(--notion-black);
+            background: var(--notion-white);
+            cursor: pointer;
+            font-weight: 500;
+            width: 170px;
+        }
+
+        .sequence-select:focus {
+            outline: none;
+            border-color: var(--notion-blue);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 16px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: var(--notion-black);
+            cursor: pointer;
+        }
+
+        .radio-label input[type="radio"] {
+            margin: 0;
+            cursor: pointer;
+            accent-color: var(--notion-black);
+        }
+
+        .reset-button {
+            background-color: var(--notion-gray);
+            min-width: 80px;
+        }
+
+        .reset-button:hover {
+            background-color: rgba(120, 119, 116, 0.85);
+        }
+
+        /* 라디오 버튼 스타일 추가 */
+        input[type="radio"] {
+            accent-color: var(--notion-black);  /* 라디오 버튼 색상을 노션 블랙으로 변경 */
+        }
+
+        .radio-label input[type="radio"] {
+            margin: 0;
+            cursor: pointer;
+            accent-color: var(--notion-black);  /* 라디오 버튼 색상을 노션 블랙으로 변경 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sequences Project</h1>
+        
+        <h2>Compare Sequences (시퀀스 비교)</h2>
+        <div class="input-group">
+            <label for="seq1">첫 번째 시퀀스</label>
+            <textarea id="seq1" placeholder="시퀀스를 입력하세요"></textarea>
+        </div>
+        <div class="input-group">
+            <label for="seq2">두 번째 시퀀스</label>
+            <textarea id="seq2" placeholder="시퀀스를 입력하세요"></textarea>
+        </div>
+        <div class="controls">
+            <div class="width-container">
+                <label for="width">너비:</label>
+                <input type="number" id="width" value="60" min="1" max="100">
+            </div>
+            <button onclick="compareSequences()">비교하기</button>
+            <button onclick="resetCompare()" class="reset-button">초기화</button>
+        </div>
+        <div class="result-section">
+            <label class="result-label">비교 결과</label>
+            <div id="result"></div>
+        </div>
+        <div class="section-divider"></div>
+        <h2>Convert Sequences (시퀀스 변환)</h2>
+        <div class="input-group">
+            <label for="reverseInput">입력 시퀀스</label>
+            <textarea id="reverseInput" placeholder="시퀀스를 입력하세요"></textarea>
+        </div>
+        <div class="controls">
+            <select id="sequenceType" class="sequence-select">
+                <option value="reverse">Reverse Sequence</option>
+                <option value="dnaToRna">DNA to RNA</option>
+                <option value="rnaToDna">RNA to DNA</option>
+            </select>
+            <button onclick="processSequence()">변환하기</button>
+            <button onclick="resetConvert()" class="reset-button">초기화</button>
+        </div>
+        <div class="result-section">
+            <div class="result-header">
+                <label class="result-label">변환 결과</label>
+                <div class="view-options">
+                    <label class="radio-label">
+                        <input type="radio" name="viewOption" value="all" checked>
+                        전체 보기
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="viewOption" value="original">
+                        Original
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="viewOption" value="reversed">
+                        <span id="convertedLabel">Reversed</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="viewOption" value="complement">
+                        Complement
+                    </label>
+                </div>
+            </div>
+            <div id="reverseResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // width input의 이벤트 리스너 추가
+        document.getElementById('width').addEventListener('input', function() {
+            let width = parseInt(this.value);
+            if (isNaN(width)) return; // 숫자가 아닌 경우 처리하지 않음
+            
+            // 너비 값을 1-100 사이로 제한
+            width = Math.min(Math.max(width, 1), 100);
+            this.value = width; // 입력값 업데이트
+        });
+
+        function compareSequences() {
+            const seq1 = document.getElementById('seq1').value;
+            const seq2 = document.getElementById('seq2').value;
+            const width = parseInt(document.getElementById('width').value);
+            
+            let seq1List = [];
+            let seq2List = [];
+            let compare = [];
+            
+            const maxLength = Math.max(seq1.length, seq2.length);
+            
+            // 첫 번째 텍스트 처리
+            for (let i = 0; i < maxLength; i += width) {
+                const currentText = seq1.slice(i, i + width);
+                const endIndex = i + currentText.length;
+                const padding = " ".repeat(width - currentText.length);
+                const spacePadding = width >= 85 ? "        " : "    ";
+                seq1List.push(`${(i+1).toString().padEnd(7)}${currentText}${padding}${spacePadding}${endIndex}`);
+            }
+            
+            // 두 번째 텍스트 처리
+            for (let j = 0; j < maxLength; j += width) {
+                const currentText2 = seq2.slice(j, j + width);
+                const endIndex2 = j + currentText2.length;
+                const padding2 = " ".repeat(width - currentText2.length);
+                const spacePadding = width >= 85 ? "        " : "    ";
+                seq2List.push(`${(j+1).toString().padEnd(7)}${currentText2}${padding2}${spacePadding}${endIndex2}`);
+            }
+            
+            // 텍스트 비교 결과 처리
+            let result = "";
+            for (let i = 0; i < maxLength; i++) {
+                if (i < seq1.length && i < seq2.length) {
+                    result += seq1[i] === seq2[i] ? "*" : "-";
+                } else {
+                    result += "-";
+                }
+            }
+            
+            // '*' 비율 계산
+            const asteriskCount = (result.match(/\*/g) || []).length;
+            const percentage = (asteriskCount / result.length) * 100 || 0;
+            
+            // result를 width 길이로 나누어 저장
+            for (let k = 0; k < result.length; k += width) {
+                const currentResult = result.slice(k, k + width);
+                const padding = " ".repeat(width - currentResult.length);
+                compare.push(`${"".padEnd(7)}${currentResult}${padding}`);
+            }
+            
+            // 최종 결과 조합
+            const finalLines = [];
+            const length = Math.max(seq1List.length, seq2List.length, compare.length);
+            
+            for (let k = 0; k < length; k++) {
+                if (k < seq1List.length) finalLines.push(seq1List[k]);
+                if (k < seq2List.length) finalLines.push(seq2List[k]);
+                if (k < compare.length) finalLines.push(compare[k]);
+            }
+            
+            // 결과 표시
+            document.getElementById('result').textContent = 
+                finalLines.join('\n') + `\n\n일치율: ${percentage.toFixed(2)}%`;
+        }
+
+        function isValidSequence(sequence, type) {
+            const dnaPattern = /^[ATCGatcg]+$/;
+            const rnaPattern = /^[AUCGaucg]+$/;
+            
+            if (type === 'dna') {
+                return dnaPattern.test(sequence);
+            } else if (type === 'rna') {
+                return rnaPattern.test(sequence);
+            }
+            return false;
+        }
+
+        let lastResult = ''; // 마지막 변환 결과를 저할 변수
+
+        function processSequence() {
+            const input = document.getElementById('reverseInput').value.trim();
+            const type = document.getElementById('sequenceType').value;
+            const upperInput = input.toUpperCase();
+
+            if (!input) {
+                alert('시퀀스를 입력하세요.');
+                return;
+            }
+
+            let result = '';
+
+            switch(type) {
+                case 'reverse':
+                    result = processReverseSequence(input);
+                    break;
+                case 'dnaToRna':
+                    if (!isValidSequence(input, 'dna')) {
+                        result = `Original DNA:\n${upperInput}\n\n` +
+                                `DNA to RNA:\n염기서열이 아닙니다.\n\n` +
+                                `Complementary RNA:\n염기서열이 아닙니다.`;
+                    } else {
+                        result = processDnaToRna(input);
+                    }
+                    break;
+                case 'rnaToDna':
+                    if (!isValidSequence(input, 'rna')) {
+                        result = `Original RNA:\n${upperInput}\n\n` +
+                                `RNA to DNA:\n염기서열이 아닙니다.\n\n` +
+                                `Complementary DNA:\n염기서열이 아닙니다.`;
+                    } else {
+                        result = processRnaToDna(input);
+                    }
+                    break;
+            }
+
+            lastResult = result;
+            
+            // 라디오 버튼을 '전체 보기'로 설정
+            document.querySelector('input[name="viewOption"][value="all"]').checked = true;
+            
+            updateResult();
+        }
+
+        function updateResult() {
+            const selectedView = document.querySelector('input[name="viewOption"]:checked').value;
+            const lines = lastResult.split('\n\n');
+            let displayResult = '';
+
+            switch(selectedView) {
+                case 'all':
+                    displayResult = lastResult;
+                    break;
+                case 'original':
+                    displayResult = lines[0];
+                    break;
+                case 'reversed':
+                    if (lines[1]) displayResult = lines[1];
+                    break;
+                case 'complement':
+                    if (lines[2]) displayResult = lines[2];
+                    break;
+            }
+
+            document.getElementById('reverseResult').textContent = displayResult;
+        }
+
+        // 라디오 버튼 변경 이벤트 리스너 추가
+        document.querySelectorAll('input[name="viewOption"]').forEach(radio => {
+            radio.addEventListener('change', updateResult);
+        });
+
+        function processReverseSequence(input) {
+            // 입력값을 대문자로 변환
+            const upperInput = input.toUpperCase();
+            
+            // DNA/RNA 시퀀스 리버스 및 상보적 기로 변환
+            const reverseComplement = upperInput
+                .split('')
+                .reverse()
+                .map(base => {
+                    switch(base) {
+                        case 'A': return upperInput.includes('U') ? 'U' : 'T';
+                        case 'T': return 'A';
+                        case 'U': return 'A';
+                        case 'G': return 'C';
+                        case 'C': return 'G';
+                        default: return base;
+                    }
+                })
+                .join('');
+
+            return `Original:\n${upperInput}\n\n` +
+                   `Reversed:\n${upperInput.split('').reverse().join('')}\n\n` +
+                   `Reverse Complement:\n${reverseComplement}`;
+        }
+
+        function processDnaToRna(input) {
+            // 입력값을 대문자로 변환
+            const upperInput = input.toUpperCase();
+            
+            // DNA를 RNA로 변환 (T -> U)
+            const rnaSequence = upperInput
+                .split('')
+                .map(base => base === 'T' ? 'U' : base)
+                .join('');
+            
+            // RNA를 상보적 RNA로 변환
+            const complementaryRna = upperInput
+                .split('')
+                .map(base => {
+                    switch(base) {
+                        case 'A': return 'U';
+                        case 'T': return 'A';
+                        case 'G': return 'C';
+                        case 'C': return 'G';
+                        default: return base;
+                    }
+                })
+                .join('');
+
+            return `Original DNA:\n${upperInput}\n\n` +
+                   `DNA to RNA:\n${rnaSequence}\n\n` +
+                   `Complementary RNA:\n${complementaryRna}`;
+        }
+
+        function processRnaToDna(input) {
+            // 입력값을 대문자로 변환
+            const upperInput = input.toUpperCase();
+            
+            // RNA를 DNA로 변환 (U -> T)
+            const dnaSequence = upperInput
+                .split('')
+                .map(base => base === 'U' ? 'T' : base)
+                .join('');
+            
+            // DNA를 상보적 DNA로 변환
+            const complementaryDna = upperInput
+                .split('')
+                .map(base => {
+                    switch(base) {
+                        case 'A': return 'T';
+                        case 'U': return 'A';
+                        case 'G': return 'C';
+                        case 'C': return 'G';
+                        default: return base;
+                    }
+                })
+                .join('');
+
+            return `Original RNA:\n${upperInput}\n\n` +
+                   `RNA to DNA:\n${dnaSequence}\n\n` +
+                   `Complementary DNA:\n${complementaryDna}`;
+        }
+
+        // 시퀀스 타입 변경 이벤트 리스너 추가
+        document.getElementById('sequenceType').addEventListener('change', function() {
+            const convertedLabel = document.getElementById('convertedLabel');
+            const selectedType = this.value;
+            
+            switch(selectedType) {
+                case 'reverse':
+                    convertedLabel.textContent = 'Reversed';
+                    break;
+                case 'dnaToRna':
+                    convertedLabel.textContent = 'DNA to RNA';
+                    break;
+                case 'rnaToDna':
+                    convertedLabel.textContent = 'RNA to DNA';
+                    break;
+            }
+        });
+
+        // 비교하기 엔터 키 이벤트
+        document.addEventListener('keydown', function(event) {
+            // 현재 포커스된 요소 확인
+            const activeElement = document.activeElement;
+            const compareInputs = [
+                document.getElementById('seq1'),
+                document.getElementById('seq2'),
+                document.getElementById('width')
+            ];
+
+            // Enter 키가 눌렸고, 비교하기 관련 입력 필드 중 하나에 포커스가 있는 경우
+            if (event.key === 'Enter' && compareInputs.includes(activeElement)) {
+                event.preventDefault(); // 기본 엔터 동작 방지
+                compareSequences();
+            }
+        });
+
+        // 변환하기 엔터 키 이벤트
+        document.getElementById('reverseInput').addEventListener('keydown', function(event) {
+            // Shift + Enter는 무시 (줄바꿈 허용)
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                processSequence();
+            }
+        });
+
+        // sequenceType select에도 엔터 키 이벤트 추가
+        document.getElementById('sequenceType').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                processSequence();
+            }
+        });
+
+        // 비교하기 초기화 함수
+        function resetCompare() {
+            document.getElementById('seq1').value = '';
+            document.getElementById('seq2').value = '';
+            document.getElementById('width').value = '60';
+            document.getElementById('result').textContent = '';
+        }
+
+        // 변환하기 초기화 함수
+        function resetConvert() {
+            document.getElementById('reverseInput').value = '';
+            document.getElementById('sequenceType').value = 'reverse';
+            document.getElementById('reverseResult').textContent = '';
+            document.getElementById('convertedLabel').textContent = 'Reversed';
+            // 라디오 버튼 '전체 보기'로 초기화
+            document.querySelector('input[name="viewOption"][value="all"]').checked = true;
+        }
+    </script>
+</body>
+</html>
