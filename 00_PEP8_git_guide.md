@@ -1,7 +1,8 @@
 ## font
 리눅스 사용 폰트
 - DejaVu Sans Mono -> Editor: Font Family, notebook
-- AppleSDGothicNeoR00 -> markdown font
+- AppleSDGothicNeoB00 -> markdown font
+- AppleSDGothicNeoM00 -> Notebook › Markup: Font Family
 
 
 ## git guide
