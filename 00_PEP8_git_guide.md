@@ -1,3 +1,9 @@
+## font
+리눅스 사용 폰트
+- DejaVu Sans Mono -> Editor: Font Family, notebook
+- AppleSDGothicNeoR00 -> markdown font
+
+
 ## git guide
 가장 흔한 커밋 규칙(Conventional Commits 스타일)
 
